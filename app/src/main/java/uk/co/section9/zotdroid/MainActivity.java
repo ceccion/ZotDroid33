@@ -21,6 +21,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 //import android.support.design.widget.NavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import androidx.core.content.FileProvider;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.appcompat.app.ActionBarDrawerToggle;
@@ -780,13 +782,16 @@ public class MainActivity extends AppCompatActivity
                     Intent intent = new Intent();
                     File ff7 = new File(message);
 
-                    if (ff7.exists()) {
+                    if (ff7.exists() && ff7.canRead()) {
                         intent.setAction(android.content.Intent.ACTION_VIEW);
                         Log.i(TAG, "Attempting to open " + message);
                         try {
-                            intent.setDataAndType(Uri.fromFile(ff7), filetype);
-                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                            Uri pdfURI = FileProvider.getUriForFile(MainActivity.this,
+                                    "uk.co.section9.zotdroid.provider",
+                                    ff7);
+                            intent.setDataAndType(pdfURI, filetype);
+                            intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION|Intent.FLAG_ACTIVITY_NEW_TASK);
+                            //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             _download_dialog.dismiss();
                             startActivity(intent);
                             _download_dialog.dismiss();
