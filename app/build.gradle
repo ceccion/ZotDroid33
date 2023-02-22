@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.1"
+    compileSdkVersion 33
+    //buildToolsVersion "26.0.2"
     defaultConfig {
         applicationId "uk.co.section9.zotdroid"
         minSdkVersion 19
-        targetSdkVersion 26
+        targetSdkVersion 33
         versionCode 16
         versionName '0.81'
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
 
     }
     buildTypes {
@@ -23,18 +23,21 @@ android {
     }
     productFlavors {
     }
+    namespace 'uk.co.section9.zotdroid'
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.1.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    testCompile 'junit:junit:4.12'
-    compile files('libs/signpost-commonshttp3-1.2.1.1.jar')
-    compile files('libs/signpost-core-1.2.1.2.jar')
-    compile files('libs/signpost-jetty6-1.2.1.2.jar')
-    compile 'com.android.support:appcompat-v7:26.+'
-    compile 'com.android.support:design:26.+'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    //implementation files('libs/signpost-commonshttp3-1.2.1.1.jar')
+    // put this back if it all breaks and I start crying
+    implementation files('libs/signpost-commonshttp4-2.1.1.jar')
+    implementation files('libs/signpost-core-2.1.1.jar')
+    implementation files('libs/signpost-jetty6-2.1.1.jar')
+    implementation 'androidx.appcompat:appcompat:1.0.0'
+    implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidx.constraintlayout:constraintlayout:1.1.3'
 }

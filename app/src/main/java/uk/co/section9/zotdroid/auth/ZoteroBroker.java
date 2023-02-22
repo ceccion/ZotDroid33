@@ -6,7 +6,7 @@ package uk.co.section9.zotdroid.auth;
 
 import oauth.signpost.*;
 import oauth.signpost.basic.DefaultOAuthProvider;
-import oauth.signpost.commonshttp3.CommonsHttp3OAuthConsumer;
+import oauth.signpost.commonshttp.CommonsHttpOAuthConsumer;
 import oauth.signpost.exception.OAuthCommunicationException;
 import oauth.signpost.exception.OAuthExpectationFailedException;
 import oauth.signpost.exception.OAuthMessageSignerException;
@@ -40,7 +40,7 @@ public class ZoteroBroker {
     /** This is the zotero:// protocol we intercept
      * It probably shouldn't be changed. */
     public static final String CALLBACK_URL = "zotero://";
-    static CommonsHttp3OAuthConsumer Consumer;
+    static CommonsHttpOAuthConsumer Consumer;
     static OAuthProvider Provider;
 
     // TODO - replace this with actually testing the tokens and such (they may be outtdated or filled in wrong)
@@ -160,7 +160,7 @@ public class ZoteroBroker {
                 StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build(); StrictMode.setThreadPolicy(policy);
             }
 
-            Consumer = new CommonsHttp3OAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
+            Consumer = new CommonsHttpOAuthConsumer(CONSUMER_KEY, CONSUMER_SECRET);
             Provider = new DefaultOAuthProvider(OAUTH_REQUEST, OAUTH_ACCESS, OAUTH_AUTHORIZE);
 
             Log.d(TAG,"Fetching request token from Zotero...");

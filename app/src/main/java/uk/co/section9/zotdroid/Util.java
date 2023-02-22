@@ -1,9 +1,14 @@
 package uk.co.section9.zotdroid;
 
+import static android.provider.Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION;
+import static androidx.core.content.PermissionChecker.PERMISSION_DENIED;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+
+import androidx.core.content.ContextCompat;
 
 import java.io.File;
 import java.text.ParseException;
@@ -24,6 +29,7 @@ public class Util {
     public static final TimeZone UTC = TimeZone.getTimeZone("UTC");
     public static final String DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     public static final String DB_DATE_FORMAT = "yyyy-MM-dd HH:mm:ssZ";
+
 
     public static Date jsonStringToDate(String s) {
         // This apparently was supposed to work but really doesnt ><
