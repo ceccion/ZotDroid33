@@ -7,6 +7,7 @@ import android.app.Activity;
 import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.app.Activity;
 
 import androidx.core.content.ContextCompat;
 
@@ -103,7 +104,8 @@ public class Util {
         String download_path = settings.getString("settings_download_location", "");
 
         if (!path_exists(download_path)) {
-            download_path = Environment.getExternalStorageDirectory().toString() + "/ZotDroid/";
+            //download_path = Environment.getExternalStorageDirectory().toString() + "/ZotDroid/";
+            download_path = activity.getExternalFilesDir(null).getAbsolutePath();
             File root_dir = new File(download_path);
             if (!root_dir.exists()) {
                 root_dir.mkdirs();
