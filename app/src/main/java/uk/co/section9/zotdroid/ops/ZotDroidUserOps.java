@@ -139,27 +139,29 @@ public class ZotDroidUserOps extends ZotDroidOps implements ZoteroWebDavCallback
         }
         // TODO return somekind of false here
     }
-    public void deleteAttachment(Record record, int attachment_idx) {
+
+
+    public boolean deleteAttachmentFile(Record record, int attachment_idx) {
         if (attachment_idx < record.get_attachments().size()) {
             Attachment za = record.get_attachments().elementAt(attachment_idx);
-            SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(_activity);
 
-            File file = new File(Util.getDownloadDirectory(_activity) + za.get_file_name());
-
-            String message = null;
-            if (file.exists()) {
-                if (file.delete()) {
-                    message = "Deleting " + za.get_file_name();
-                } else {
-                    message = "Failed to delete " + za.get_file_name();
-                }
-            } else {
-                message = "Cannot delete " + za.get_file_name();
-            }
-            Toast toast = Toast.makeText(_activity.getApplicationContext(),
-                    message, Toast.LENGTH_SHORT);
-            toast.show();
+            return deleteAttachmentFile(za);
         }
+        return false;
+    }
+
+    public boolean deleteAttachmentFile(Attachment attachment) {
+        File file = new File(Util.getDownloadDirectory(_activity) + attachment.get_file_name());
+        if (file.exists()) {
+            String message = null;
+
+            if (file.delete()) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+        return false;
     }
 
     /**

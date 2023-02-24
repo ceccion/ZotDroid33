@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ZotDroid</string>
+    <string name="app_name">ZotDroid33</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_settings">Settings</string>
@@ -81,7 +81,9 @@
 
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
-    <string name="title_activity_main">ZotDroid</string>
+    <string name="title_activity_main">ZotDroid33</string>
+
+    <string name="action_delete_files">Delete All Files</string>
 
     <!-- XList related stuff -->
     <string name="xlistview_header_hint_normal">Scrolling up does nothing yet.</string>

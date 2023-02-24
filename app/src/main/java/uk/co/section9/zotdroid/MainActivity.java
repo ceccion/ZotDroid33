@@ -44,13 +44,17 @@ import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import java.io.File;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Vector;
 
 import me.maxwin.view.XListView;
 import uk.co.section9.zotdroid.auth.ZoteroBroker;
+import uk.co.section9.zotdroid.data.ZotDroidDB;
 import uk.co.section9.zotdroid.data.zotero.Attachment;
 import uk.co.section9.zotdroid.data.zotero.Author;
 import uk.co.section9.zotdroid.data.zotero.Collection;
@@ -302,6 +306,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     /**
+     * Delete all downloaded files
+     */
+    private void deleteAllFiles() {
+        ZotDroidApp app = (ZotDroidApp) getApplication();
+        ZotDroidDB db = app.getDB();
+
+        int n = db.getNumRecords();
+        Vector<Record> records = db.getRecords(n);
+        for (Record record : records) {
+            Vector<Attachment> attachments = db.getAttachmentsForRecord(record);
+            for (Attachment attachment : attachments) {
+                _zotdroid_user_ops.deleteAttachmentFile(attachment);
+            }
+        }
+        Toast toast = Toast.makeText(MainActivity.this.getApplicationContext(),
+                "Deleted all downloaded files", Toast.LENGTH_SHORT);
+        toast.show();
+    }
+
+    /**
      * We redraw our record list completely, based on the information held in the ZotDroidMem 'pool'
      */
     private void redrawRecordList() {
@@ -346,7 +370,7 @@ public class MainActivity extends AppCompatActivity
                 String tv = (String)_main_list_adapter.getChild(groupPosition,childPosition);
                 // This is a bit flimsy! :(
                 if (tv.contains("Attachment")) {
-                    record = _main_list_map.get(Integer.valueOf(groupPosition));
+                    record = _main_list_map.get(groupPosition);
                     if (record != null) {
                         launchDownloadDialog();
                         _zotdroid_user_ops.startAttachmentDownload(record, childPosition - aidx);
@@ -381,9 +405,20 @@ public class MainActivity extends AppCompatActivity
                    Record record = null;
                    String tv = (String)_main_list_adapter.getChild(groupPosition,childPosition);
                    if (tv.contains("Attachment")) {
-                       record = _main_list_map.get(Integer.valueOf(groupPosition));
+                       record = _main_list_map.get(groupPosition);
                        if (record != null) {
-                           _zotdroid_user_ops.deleteAttachment(record, childPosition - aidx);
+                           String name = record.get_attachments().elementAt(childPosition-aidx).get_file_name();
+
+                           if (_zotdroid_user_ops.deleteAttachmentFile(record,
+                                   childPosition - aidx)) {
+                               Toast toast = Toast.makeText(MainActivity.this.getApplicationContext(),
+                                       "Deleted " + name, Toast.LENGTH_SHORT);
+                               toast.show();
+                           } else {
+                               Toast toast = Toast.makeText(MainActivity.this.getApplicationContext(),
+                                       "Failed to delete " + name, Toast.LENGTH_SHORT);
+                               toast.show();
+                           }
                        }
                    }
                    return true;
@@ -709,6 +744,10 @@ public class MainActivity extends AppCompatActivity
 
             case R.id.action_test_webdav:
                 startTestWebDav();
+                return true;
+
+            case R.id.action_delete_all:
+                deleteAllFiles();
                 return true;
 
             default:
