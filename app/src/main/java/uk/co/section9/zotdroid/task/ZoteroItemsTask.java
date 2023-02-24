@@ -159,6 +159,82 @@ public class ZoteroItemsTask extends ZoteroGet {
         return record;
     }
 
+    protected Record processAttachmentAsEntry(JSONObject jobj) {
+        Record record = new Record();
+
+        try {
+            record.set_zotero_key(jobj.getString("key"));
+        } catch (JSONException e){
+            // We should always have a key. If we dont then bad things :S
+        }
+
+        try {
+            record.set_title(jobj.getString("title"));
+        } catch (JSONException e) {
+            record.set_title("No title");
+        }
+
+        try {
+            String td = jobj.getString("dateAdded");
+            //record.set_date_added(Util.jsonStringToDate(td));
+            record.set_date_added(td);
+
+        } catch (JSONException e) {
+            // Pass - go with today's date
+        }
+
+        try {
+            String td = jobj.getString("dateModified");
+            //record.set_date_modified(Util.jsonStringToDate(td));
+            record.set_date_modified(td);
+        } catch (JSONException e) {
+            // Pass - go with today's date
+        }
+
+        try {
+            JSONArray tags = jobj.getJSONArray("tags");
+            for ( int i = 0; i < tags.length(); i++){
+                record.add_tag(new Tag(tags.getJSONObject(i).getString("tag"), record.get_zotero_key()) );
+            }
+        } catch (JSONException e) {
+            // pass - no tags
+        }
+
+        try {
+            record.set_parent(jobj.getString("parent"));
+        } catch (JSONException e){
+            record.set_parent("");
+        }
+
+        try {
+            record.set_item_type(jobj.getString("itemType"));
+        } catch (JSONException e){
+            record.set_item_type("");
+        }
+
+        try {
+            record.set_version(jobj.getString("version"));
+        } catch (JSONException e){
+            record.set_version("0000");
+        }
+
+        try {
+            JSONArray collections = jobj.getJSONArray("collections");
+            for (int i=0; i < collections.length(); i++) {
+                try {
+                    String tj = collections.getString(i);
+                    record.addTempCollection(tj);
+                } catch (JSONException e) {
+                }
+            }
+
+        } catch (JSONException e) {
+        }
+
+        record.set_synced(true);
+        return record;
+    }
+
     protected Note processNote(JSONObject jobj) {
         // TODO - complete this
         try {
@@ -171,9 +247,10 @@ public class ZoteroItemsTask extends ZoteroGet {
 
     protected Attachment processAttachment(JSONObject jobj) {
         Attachment attachment = new Attachment();
-
+        String key = "00000000";
         try {
             attachment.set_zotero_key(jobj.getString("key"));
+            key = jobj.getString("key");
         } catch (JSONException e){
             // We should always have a key. If we dont then bad things :S
         }
@@ -187,7 +264,7 @@ public class ZoteroItemsTask extends ZoteroGet {
         try {
             attachment.set_parent(jobj.getString("parentItem"));
         } catch (JSONException e){
-
+            attachment.set_parent(key);
         }
 
         try {
@@ -240,9 +317,17 @@ public class ZoteroItemsTask extends ZoteroGet {
                     JSONObject jobjtop = jArray.getJSONObject(i);
                     JSONObject jobj = jobjtop.getJSONObject("data");
                     if (jobj.getString("itemType").contains("attachment")){
+                        try {
+                            jobj.getString("parentItem");
+                        }
+                        catch (JSONException e) {
+                            records.add(processAttachmentAsEntry(jobj));
+                        }
                         attachments.add(processAttachment(jobj));
                     } else if (jobj.getString("itemType").contains("note")) {
                         notes.add(processNote(jobj));
+                    } else if (jobj.getString("itemType").contains("annotation")) {
+                        //TODO handle annotations in a way that makes sense and is good
                     } else {
                         records.add(processEntry(jobj));
                     }

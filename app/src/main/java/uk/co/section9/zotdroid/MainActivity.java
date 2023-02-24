@@ -16,6 +16,7 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.text.Html;
 import android.view.ViewGroup;
+import android.widget.ExpandableListAdapter;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
 import android.util.DisplayMetrics;
@@ -358,6 +359,37 @@ public class MainActivity extends AppCompatActivity
 
                 return true;
             }
+        });
+        _main_list_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View childView, int flatPos, long id) {
+               if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD) {
+                   final ExpandableListAdapter adapter = ((ExpandableListView) parent).getExpandableListAdapter();
+                   long packedPos = ((ExpandableListView) parent).getExpandableListPosition(flatPos);
+                   int groupPosition = ExpandableListView.getPackedPositionGroup(packedPos);
+                   int childPosition = ExpandableListView.getPackedPositionChild(packedPos);
+
+                   int total = _main_list_adapter.getChildrenCount(groupPosition);
+                   int aidx = 0;
+                   for (aidx = 0; aidx < total; aidx++){
+                       String tv = (String)_main_list_adapter.getChild(groupPosition,aidx);
+                       if (tv.contains("Attachment")){
+                           break;
+                       }
+                   }
+
+                   Record record = null;
+                   String tv = (String)_main_list_adapter.getChild(groupPosition,childPosition);
+                   if (tv.contains("Attachment")) {
+                       record = _main_list_map.get(Integer.valueOf(groupPosition));
+                       if (record != null) {
+                           _zotdroid_user_ops.deleteAttachment(record, childPosition - aidx);
+                       }
+                   }
+                   return true;
+               }
+               return false;
+           }
         });
     }
 
