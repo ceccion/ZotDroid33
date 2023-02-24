@@ -1,77 +1,50 @@
 ZotDroid
 ========
 
-A Zotero Client for Android devices
+A Zotero Client for Android devices, Updated for Android SDK 33
 -----------------------------------
+This is my attempt to resurrect the ZotDroid open source Zotero Android App, because I want to sync to my phone and I don't want to pay for Zotero's server storage.
+Naturally, this means the best option is to spend several hours of my free time in Android Development Hell.
 
-[Zotero](http://www.zotero.org) is a fantasic program for anyone doing any kind of research. Seriously! I'm a research student in Computer Science and Bioinformatics and I could not do what I do without Zotero. Accept no substitutes! :)
-
-I like to use my tablet to read PDFs and similar so I wanted an Android client. There wasn't one on the market that I liked so I wrote my own.
-
-Feedback is more than welcome, either here or via email *me@benjamin.computer*
+The app is now in a state I call "Good Enough". It has all the important features of the 2017 release, plus a few more that I needed to add because of changes I made to get the thing working with the new SDK. There's still more I want to do to the app when I have the time, but I'm pretty busy, so don't hold your breath (or better yet, if you have an idea, implement it and submit a pull request!)
 
 Current Version
 ---------------
 
-0.81
+0.5
 
-Building and Testing
---------------------
-
-This is an AndroidStudio project and should just drop right in. However, you do need to download [Signpost](https://github.com/mttkay/signpost) as this is required for the OAUTH stuff. I build this using Maven and then drop in the Jar files once built.
-
-If you follow the instructions on that page, you should get a set of jars that you can place in the lib directory within this project. Make sure they are added as dependencies and it should all compile fine.
-
-
-Things that are done
---------------------
-
-* Pagination (still in progress)
-* Reading a fresh copy of a Zotero Library
-* Downloading an attachment via the WebDav interface
-* Basic search on all fields
-* Selecting a collection and viewing the items for just that collection
-* Incremental syncing
-* Backing up via SQLite DB
-* Support for Zotero cloud storage
-* Storing the database on an SDCard
-* Option as to where to save attachments
-* Tag support
-* Modifying notes
-* Icons to show if an attachment is downloaded already (partial)
-* Multiple Author records
-
-
-Things still to do
-------------------
-* More testing!
-* Adding notes
-* Removing records
-* Removing collections
-* Modifying records
-* Sorting via multiple options such as date
-* More robust recovery from internet problems
-* Better UX design
-* Whatever the greater Zotero community wants
-
-Acknowledgements
+Working Features
 ----------------
 
-* The [Zotero](https://www.zotero.org) crew for making a wicked awesome program!
+* Syncing with WebDav
+* Downloading, opening, and deleting files
+
+Features I Still Need to Test
+-----------------------------
+
+* Syncing with the Zotero servers
+* Write functions, namely writing new notes and new tags
+
+Future Features
+---------------
+
+* Better UI, specifically removing the "ZotDroid 33" from the top of every page and adding a nicer collection selector
+* Examine whether the client key and client secret should be randomly generated on first startup
+* Add support for annotations
+
+Acknowledgements (Inherited from the original repo)
+---------------------------------------------------
+
 * ZotDroid makes use of [Signpost](https://github.com/mttkay/signpost). This lives in the external directory for these who wish to build ZotDroid themselves.
-* The [Zandy](https://github.com/avram/zandy) project, for an idea on how OAUTH works.
 * [XListView-Android](https://github.com/Maxwin-z/XListView-Android) - For the very handy list dragging animations and event handling.
 
 Licence
 -------
 
-    ZotDroid - An Android client for Zotero
-    Copyright (C) 2017  Benjamin Blundell
+    ZotDroid33 - An Android client for Zotero
+    Copyright (C) 2023  Nick Ceccio
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as
-    published by the Free Software Foundation, either version 3 of the
-    License, or (at your option) any later version.
+    This program is licensed under version 3 of the GNU Affero General Public License
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
